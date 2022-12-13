@@ -112,3 +112,16 @@ h6 {
     width: 2.4rem;
   }
 }
+
+/* ------ GIFs Section ------ */
+.gifs__wrapper{
+    position: relative;
+}
+
+.gif{
+    position: absolute;
+}
+.gif-img{
+    vertical-align: top;
+    width: 100%;
+}
