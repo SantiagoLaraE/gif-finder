@@ -50,6 +50,7 @@ h6 {
   flex: 1;
   background-color: red;
   height: 1rem;
+  animation: barAnimation 1s ease-in-out infinite;
 }
 
 .bar--yellow {
@@ -57,15 +58,38 @@ h6 {
 }
 .bar--red {
   background-color: var(--red);
+  animation-delay: 0.1s;
 }
 .bar--purple {
   background-color: var(--purple);
+  animation-delay: 0.2s;
 }
 .bar--blue {
   background-color: var(--blue);
+  animation-delay: 0.3s;
 }
 .bar--green {
   background-color: var(--green);
+  animation-delay: 0.4s;
+}
+
+@keyframes barAnimation {
+  0% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(2);
+  }
+  100% {
+    transform: scaleY(0.5);
+  }
+}
+@media (prefers-reduced-motion) {
+  @keyframes barAnimation {
+    0% {
+      transform: none;
+    }
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -108,32 +132,32 @@ h6 {
   .form__btn {
     padding: 1.5rem;
   }
-  .form__btn img{
+  .form__btn img {
     width: 2.4rem;
   }
 }
 
 /* ------ GIFs Section ------ */
 
-.gifs__title{
+.gifs__title {
   font-size: 1.6rem;
   margin: 1.6rem 0 1.2rem;
 }
 
-.gifs__wrapper{
-    position: relative;
-    min-height: 100vh;;
+.gifs__wrapper {
+  position: relative;
+  min-height: 100vh;
 }
 
-.gif{
-    position: absolute;
+.gif {
+  position: absolute;
 }
-.gif-img{
-    vertical-align: top;
-    width: 100%;
+.gif-img {
+  vertical-align: top;
+  width: 100%;
 }
 @media screen and (min-width: 768px) {
-  .gifs__title{
+  .gifs__title {
     font-size: 2.2rem;
     margin: 2.2rem 0 1.8rem;
   }
