@@ -27,9 +27,7 @@ export function setGIFWidth(wrapperWidth) {
 export function setGIFTranslate(index, width, height) {
   const translateX = (index % columns) * width + (index % columns) * gap;
   const translateY = columnHeights[`column-${index % columns}`] + gap || 0;
-
   setColumnsHeights(index, height);
-
   return `translateX(${translateX}px) translateY(${translateY}px)`;
 }
 
