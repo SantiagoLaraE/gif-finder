@@ -22,7 +22,62 @@ h5,
 h6 {
   margin: 0;
 }
-.container{
-    max-width: 1200px;
-    margin: 0 auto;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ------ Header ------ */
+.header {
+  padding: 2.4rem 1.2rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1.6rem;
+}
+.header__title {
+  font-size: 3.6rem;
+}
+.header__bars:first-child {
+  display: none;
+}
+.header__bars {
+  display: flex;
+}
+.header__bar {
+  flex: 1;
+  background-color: red;
+  height: 1rem;
+}
+
+.bar--yellow {
+  background-color: var(--yellow);
+}
+.bar--red {
+  background-color: var(--red);
+}
+.bar--purple {
+  background-color: var(--purple);
+}
+.bar--blue {
+  background-color: var(--blue);
+}
+.bar--green {
+  background-color: var(--green);
+}
+
+@media screen and (min-width: 768px) {
+  .header {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 5.4rem;
+  }
+  .header__title {
+    font-size: 6.4rem;
+  }
+  .header__bars:first-child {
+    display: flex;
+  }
+  .header__bar {
+    height: 1.8rem;
+  }
 }
