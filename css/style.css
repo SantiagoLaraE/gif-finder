@@ -1,0 +1,28 @@
+:root {
+  --backgroundColor: #121212;
+  --textColor: #ffffff;
+  --yellow: #fff35c;
+  --red: #ff6666;
+  --purple: #9933ff;
+  --blue: #00ccff;
+  --green: #00ff99;
+}
+/* ------ General ------ */
+html {
+  background-color: var(--backgroundColor);
+  color: var(--textColor);
+  font-size: 62.5%;
+  font-family: "Inter", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
