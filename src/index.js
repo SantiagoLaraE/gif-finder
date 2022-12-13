@@ -21,6 +21,34 @@ function hash() {
   }
 }
 
+async function searchGIFs(hash) {
+  const query = hash.substring(8);
+  const response = await fetch(
+    `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&offset=${getOffset}&q=${query}`
+  );
+  const data = await response.json();
+  console.log(data);
+  createGIFs(data.data, true);
+}
+
+function handleQuerySubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(formQuery);
+  const queryValue = formData.get("query").toLowerCase().trim();
+  const fixedQuery = queryValue.replaceAll(" ", "+");
+
+  if (fixedQuery.length) {
+    location.hash = `#search=${fixedQuery}`;
+    query.classList.remove("form__input--error");
+  } else {
+    location.hash = "";
+    query.setAttribute("placeholder", "Type something");
+    query.classList.add("form__input--error");
+  }
+}
+
+formQuery, addEventListener("submit", handleQuerySubmit);
+
 async function getTrendingGIFs({ cleanSection }) {
   const response = await fetch(
     `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&offset=${getOffset}`

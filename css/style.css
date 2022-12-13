@@ -115,8 +115,17 @@ h6 {
 .form__input {
   font-size: 1.6rem;
   padding: 1.2rem 2.4rem;
-  border: 0.1rem solid var(--gray);
+  border-width: 0.1rem  0 0.1rem 0.1rem;
+  border-style: solid;
+  border-color: var(--gray);
   border-radius: 0.8rem 0 0 0.8rem;
+}
+.form__input--error{
+  border-width: 0.2rem  0 0.2rem 0.2rem;
+  border-color: var(--red);
+}
+.form__input--error::placeholder{
+  color: var(--red);
 }
 .form__btn {
   padding: 1.2rem;
