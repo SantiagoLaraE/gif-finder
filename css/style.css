@@ -116,6 +116,7 @@ h6 {
 /* ------ GIFs Section ------ */
 .gifs__wrapper{
     position: relative;
+    min-height: 100vh;;
 }
 
 .gif{
