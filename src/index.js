@@ -128,6 +128,7 @@ function createGIFs(GIFs, cleanSection) {
   }
 
   GIFs.map((GIF) => {
+    console.log(GIF)
     const imgWidth = GIF.images.fixed_width.width;
     const imgHeight = GIF.images.fixed_width.height;
     const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
@@ -149,6 +150,9 @@ function createGIFs(GIFs, cleanSection) {
     const img = document.createElement("img");
     img.classList.add("gif-img");
     img.dataset.src = GIF.images.fixed_width.url;
+    img.alt = GIF.title;
+    img.width = GIFWidth;
+    img.height = GIFHeight;
 
     picture.appendChild(img);
     article.appendChild(picture);
@@ -170,9 +174,12 @@ function setGrid() {
     const imgHeight = GIF.dataset.imgHeight;
     const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
 
-    GIF.style.width = `${GIFWidth}px`;
+
     const GIFImg = GIF.querySelector(".gif-img");
-    GIF.style.height = `${GIFImg.height}px`;
+    GIFImg.width = GIFWidth;
+    GIFImg.height = GIFHeight;
+    GIF.style.width = `${GIFWidth}px`;
+    GIF.style.height = `${GIFHeight}px`;
     GIF.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
   });
 
