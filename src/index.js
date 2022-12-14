@@ -13,7 +13,9 @@ let infiniteScrollData = {
   offset: 0,
   request: "",
 };
-
+function scrollToTop() {
+  window.scroll(0, 0);
+}
 function hash() {
   if (location.hash.startsWith("#search=")) {
     searchGIFs(location.hash);
@@ -37,6 +39,7 @@ async function searchGIFs(hash) {
   createGIFs(data.data, true);
   infiniteScrollData.offset = data.pagination.count;
   infiniteScrollData.total_count = data.pagination.total_count;
+  scrollToTop();
 }
 
 function handleQuerySubmit(e) {
@@ -70,6 +73,7 @@ async function getTrendingGIFs({ cleanSection }) {
   createGIFs(data.data, cleanSection);
   infiniteScrollData.offset = data.pagination.count;
   infiniteScrollData.total_count = data.pagination.total_count;
+  scrollToTop();
 }
 
 function createGIFs(GIFs, cleanSection) {
@@ -133,14 +137,6 @@ function setGrid() {
   setWrapperHeight(wrapper);
 }
 
-window.addEventListener("DOMContentLoaded", hash);
-window.addEventListener("hashchange", hash);
-window.addEventListener("resize", () => {
-  wrapperWidth = wrapper.clientWidth;
-  setGrid();
-});
-window.addEventListener("scroll", infiniteScroll);
-
 async function infiniteScroll() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
@@ -193,3 +189,25 @@ function lazyLoadGIFs(item) {
   let observer = new IntersectionObserver(handleObserver, options);
   observer.observe(item);
 }
+
+function headerChange() {
+  const header = document.querySelector('.header');
+  const headerHeight = header.clientHeight;
+  const {scrollTop} = document.documentElement;
+  if(scrollTop > (headerHeight / 2)){
+    header.classList.add('header--scrolling');
+    scrollToTopBtn.classList.add('active');
+  }else{
+    header.classList.remove('header--scrolling');
+    scrollToTopBtn.classList.remove('active');
+  }
+}
+scrollToTopBtn.addEventListener('click', scrollToTop);
+window.addEventListener("DOMContentLoaded", hash);
+window.addEventListener("hashchange", hash);
+window.addEventListener("resize", () => {
+  wrapperWidth = wrapper.clientWidth;
+  setGrid();
+});
+window.addEventListener("scroll", infiniteScroll);
+window.addEventListener("scroll", headerChange);

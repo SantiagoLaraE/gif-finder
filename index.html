@@ -32,22 +32,25 @@
             <div class="header__bar bar--blue"></div>
             <div class="header__bar bar--green"></div>
         </div>
-    </header>
-    <main>
-        <form id="formQuery" class="container">
+        <form id="formQuery">
             <input class="form__input" type="text" name="query" id="query" placeholder="Search all the GIFs">
             <button class="form__btn" type="submit">
                 <img src="./assets/searchIcon.svg" alt="Search Icon">
             </button>
         </form>
-
+    </header>
+    <main>
         <section class="gifs container">
             <h2 class="gifs__title">Trending</h2>
             <div class="gifs__wrapper">
                 
             </div>
         </section>
+        <button id="scrollToTopBtn">
+            <img src="./assets/arrowUpIcon.svg" alt="Arrow Icon">
+        </button>
     </main>
+
     <script type="module" src="./src/index.js"></script>
 </body>
 
