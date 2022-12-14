@@ -28,8 +28,8 @@ async function searchGIFs(hash) {
     request: "",
   };
   const query = hash.substring(8);
-  GIFsSectionTitle.innerHTML = query;
-  document.getElementById("query").value = query;
+  GIFsSectionTitle.innerHTML = query.replaceAll("+", " ");
+  document.getElementById("query").value = query.replaceAll("+", " ");
   const request = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${query}`;
   const response = await fetch(request);
   const data = await response.json();
@@ -131,7 +131,7 @@ async function infiniteScroll() {
 
   const scrollIsBottom = scrollTop + clientHeight >= scrollHeight - 15;
   const maxCount = infiniteScrollData.offset < infiniteScrollData.total_count;
-  
+
   if (scrollIsBottom && infiniteScrollData.request && maxCount) {
     console.log(maxCount);
     const request = infiniteScrollData.request;
