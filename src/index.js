@@ -94,7 +94,6 @@ function createGIFs(GIFs, cleanSection) {
     article.classList.add(`gif--loading-${loadingColor}`);
 
     article.style.width = `${GIFWidth}px`;
-    article.style.height = `${GIFHeight}px`;
     article.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
 
     const picture = document.createElement("picture");
