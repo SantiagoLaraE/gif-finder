@@ -1,44 +1,61 @@
-let columns;
-const gap = 8;
-let columnHeights = {};
+let columnsCount;
+const gap = 8; // pixels
+const columns = [];
 
-function setColumns(wrapperWidth) {
+function setColumnsCount(wrapperWidth) {
   if (wrapperWidth > 1080) {
-    columns = 4;
+    columnsCount = 4;
   } else if (wrapperWidth > 768) {
-    columns = 3;
+    columnsCount = 3;
   } else {
-    columns = 2;
+    columnsCount = 2;
   }
 }
 
 export function setWrapperHeight(wrapper) {
-  const itemsHeights = Object.values(columnHeights);
-  const highest =
-    itemsHeights.reduce((acc, cur) => (acc < cur ? cur : acc), 0) + gap;
-  wrapper.style.height = `${highest}px`;
+  if (columns.length) {
+    const { y: highest } = columns.reduce((acc, cur) =>
+      acc.y < cur.y ? cur : acc
+    );
+    wrapper.style.height = `${highest}px`;
+  } else {
+    wrapper.style.height = "";
+  }
 }
 
-export function setGIFWidth(wrapperWidth) {
-  setColumns(wrapperWidth);
-  return (wrapperWidth - gap * (columns - 1)) / columns;
+export function getGIFWidth(wrapperWidth) {
+  setColumnsCount(wrapperWidth);
+  return (wrapperWidth - gap * (columnsCount - 1)) / columnsCount;
 }
 
-export function setGIFTranslate(index, width, height) {
-  const translateX = (index % columns) * width + (index % columns) * gap;
-  const translateY = columnHeights[`column-${index % columns}`] + gap || 0;
-  setColumnsHeights(index, height);
-  return `translateX(${translateX}px) translateY(${translateY}px)`;
+export function getGIFTranslate(width, height) {
+  const shortestColumn = setColumnsHeights(width, height);
+
+  return `translateX(${shortestColumn.x}px) translateY(${shortestColumn.y}px)`;
 }
 
 export function resetColumnHeights() {
-  columnHeights = {};
+  columns.splice(0, columns.length);
 }
 
-function setColumnsHeights(index, height) {
-  if (columnHeights[`column-${index % columns}`]) {
-    columnHeights[`column-${index % columns}`] += height + gap;
-  } else {
-    columnHeights[`column-${index % columns}`] = height;
+function setColumnsHeights(width, height) {
+  if (!columns.length) {
+    for (let index = 1; index <= columnsCount; index++) {
+      columns.push({
+        column: index,
+        x: width * (index - 1) + gap * (index - 1),
+        y: 0,
+      });
+    }
   }
+
+  const shortestColumn = columns.reduce((acc, cur) =>
+    acc.y > cur.y ? cur : acc
+  );
+  const shortestColumnIndex = columns.findIndex(
+    (columnsCount) => columnsCount === shortestColumn
+  );
+  const initialValue = { ...shortestColumn };
+  columns[shortestColumnIndex].y += height + gap;
+  return initialValue;
 }

@@ -1,7 +1,7 @@
 import {
   setWrapperHeight,
-  setGIFWidth,
-  setGIFTranslate,
+  getGIFWidth,
+  getGIFTranslate,
   resetColumnHeights,
 } from "./GIFsGrid.js";
 
@@ -74,7 +74,7 @@ async function getTrendingGIFs({ cleanSection }) {
 
 function createGIFs(GIFs, cleanSection) {
   const fragment = new DocumentFragment();
-  const GIFWidth = setGIFWidth(wrapperWidth);
+  const GIFWidth = getGIFWidth(wrapperWidth);
 
   if (cleanSection) {
     resetColumnHeights();
@@ -89,7 +89,7 @@ function createGIFs(GIFs, cleanSection) {
     const article = document.createElement("article");
     article.classList.add("gif");
     article.style.width = `${GIFWidth}px`;
-    article.style.transform = setGIFTranslate(index, GIFWidth, GIFHeight);
+    article.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
 
     const picture = document.createElement("picture");
 
@@ -108,11 +108,11 @@ function createGIFs(GIFs, cleanSection) {
 
 function setGrid() {
   const GIFs = document.querySelectorAll(".gif");
-  const GIFWidth = setGIFWidth(wrapperWidth);
+  const GIFWidth = getGIFWidth(wrapperWidth);
   resetColumnHeights();
   GIFs.forEach((GIF, index) => {
     GIF.style.width = `${GIFWidth}px`;
-    GIF.style.transform = setGIFTranslate(index, GIFWidth, GIF.clientHeight);
+    GIF.style.transform = getGIFTranslate(GIFWidth, GIF.clientHeight);
   });
 
   setWrapperHeight(wrapper);
