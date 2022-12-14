@@ -75,30 +75,37 @@ async function getTrendingGIFs({ cleanSection }) {
 function createGIFs(GIFs, cleanSection) {
   const fragment = new DocumentFragment();
   const GIFWidth = getGIFWidth(wrapperWidth);
+  const colors = ["yellow", "red", "purple", "blue", "green"];
 
   if (cleanSection) {
     resetColumnHeights();
     wrapper.innerHTML = "";
   }
 
-  GIFs.map((GIF, index) => {
+  GIFs.map((GIF) => {
     const imgWidth = GIF.images.fixed_width.width;
     const imgHeight = GIF.images.fixed_width.height;
     const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
+    const randomNumber = Math.floor(Math.random() * colors.length);
+    const loadingColor = colors[randomNumber];
 
     const article = document.createElement("article");
     article.classList.add("gif");
+    article.classList.add(`gif--loading-${loadingColor}`);
+
     article.style.width = `${GIFWidth}px`;
+    article.style.height = `${GIFHeight}px`;
     article.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
 
     const picture = document.createElement("picture");
 
     const img = document.createElement("img");
     img.classList.add("gif-img");
-    img.src = GIF.images.fixed_width.url;
+    img.dataset.src = GIF.images.fixed_width.url;
 
     picture.appendChild(img);
     article.appendChild(picture);
+    lazyLoadGIFs(article);
     fragment.appendChild(article);
   });
   setWrapperHeight(wrapper);
@@ -110,7 +117,7 @@ function setGrid() {
   const GIFs = document.querySelectorAll(".gif");
   const GIFWidth = getGIFWidth(wrapperWidth);
   resetColumnHeights();
-  GIFs.forEach((GIF, index) => {
+  GIFs.forEach((GIF) => {
     GIF.style.width = `${GIFWidth}px`;
     GIF.style.transform = getGIFTranslate(GIFWidth, GIF.clientHeight);
   });
@@ -147,4 +154,34 @@ async function infiniteScroll() {
     infiniteScrollData.request = request;
     console.log(infiniteScrollData);
   }
+}
+
+function lazyLoadGIFs(item) {
+  let options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.5,
+  };
+
+  function handleObserver(entries, observer) {
+    entries.map((entry) => {
+      if (entry.isIntersecting) {
+        const article = entry.target;
+        const [, gifLoading] = article.classList.values();
+        
+
+        const img = article.querySelector(".gif-img");
+        img.src = img.dataset.src;
+
+        img.addEventListener('load', () => {
+          article.classList.remove(gifLoading);
+          img.classList.add("gif-img--loaded");
+        })
+
+        observer.unobserve(article);
+      }
+    });
+  }
+  let observer = new IntersectionObserver(handleObserver, options);
+  observer.observe(item);
 }

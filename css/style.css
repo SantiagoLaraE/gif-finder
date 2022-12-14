@@ -115,16 +115,16 @@ h6 {
 .form__input {
   font-size: 1.6rem;
   padding: 1.2rem 2.4rem;
-  border-width: 0.1rem  0 0.1rem 0.1rem;
+  border-width: 0.1rem 0 0.1rem 0.1rem;
   border-style: solid;
   border-color: var(--gray);
   border-radius: 0.8rem 0 0 0.8rem;
 }
-.form__input--error{
-  border-width: 0.2rem  0 0.2rem 0.2rem;
+.form__input--error {
+  border-width: 0.2rem 0 0.2rem 0.2rem;
   border-color: var(--red);
 }
-.form__input--error::placeholder{
+.form__input--error::placeholder {
   color: var(--red);
 }
 .form__btn {
@@ -153,18 +153,42 @@ h6 {
   margin: 1.6rem 0 1.2rem;
   text-transform: capitalize;
 }
-
 .gifs__wrapper {
   position: relative;
   min-height: 100vh;
 }
-
 .gif {
   position: absolute;
+  background-color: transparent;
+  transition: background-color 0.5s ease;
+}
+.gif--loading-yellow {
+  background-color: var(--yellow);
+}
+.gif--loading-red {
+  background-color: var(--red);
+  animation-delay: 0.1s;
+}
+.gif--loading-purple {
+  background-color: var(--purple);
+  animation-delay: 0.2s;
+}
+.gif--loading-blue {
+  background-color: var(--blue);
+  animation-delay: 0.3s;
+}
+.gif--loading-green {
+  background-color: var(--green);
+  animation-delay: 0.4s;
 }
 .gif-img {
   vertical-align: top;
   width: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.gif-img--loaded {
+  opacity: 1;
 }
 @media screen and (min-width: 768px) {
   .gifs__title {
