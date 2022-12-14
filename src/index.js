@@ -94,7 +94,10 @@ function createGIFs(GIFs, cleanSection) {
     article.classList.add(`gif--loading-${loadingColor}`);
 
     article.style.width = `${GIFWidth}px`;
+    article.style.height = `${GIFHeight}px`;
     article.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
+    article.dataset.imgWidth= imgWidth;
+    article.dataset.imgHeight= imgHeight;
 
     const picture = document.createElement("picture");
 
@@ -117,8 +120,14 @@ function setGrid() {
   const GIFWidth = getGIFWidth(wrapperWidth);
   resetColumnHeights();
   GIFs.forEach((GIF) => {
+    const imgWidth = GIF.dataset.imgWidth;
+    const imgHeight = GIF.dataset.imgHeight;
+    const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
+
     GIF.style.width = `${GIFWidth}px`;
-    GIF.style.transform = getGIFTranslate(GIFWidth, GIF.clientHeight);
+    const GIFImg =  GIF.querySelector('.gif-img');
+    GIF.style.height = `${GIFImg.height}px`;
+    GIF.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
   });
 
   setWrapperHeight(wrapper);
