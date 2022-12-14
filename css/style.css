@@ -288,22 +288,25 @@ h6 {
   }
 }
 
-/* ------ 404 Page Not Found ------ */
+/* ------ 404 Page Not Found & No Results------ */
 
-.pageNotFound {
+.pageNotFound, .noResultsPage {
   text-align: center;
   padding: 4.8rem 1.2rem;
   font-size: 1.6rem;
 }
 
-.pageNotFound__title {
+.pageNotFound__title{
   font-size: 7.2rem;
 }
-.pageNotFound__subtitle {
+.noResultsPage__title {
+  font-size: 5.4rem;
+}
+.pageNotFound__subtitle, .noResultsPage__subtitle {
   font-size: 3.2rem;
 }
 
-.pageNotFound__link {
+.pageNotFound__link, .noResultsPage__link {
   display: inline-block;
   margin-top: 1.6rem;
   border-radius: 0.8rem;
@@ -315,11 +318,11 @@ h6 {
 }
 
 @media screen and (min-width: 768px) {
-  .pageNotFound {
+  .pageNotFound, .noResultsPage {
     padding: 7.2rem 0;
     font-size: 1.8rem;
   }
-  .pageNotFound__title {
+  .pageNotFound__title, .noResultsPage__title {
     font-size: 10rem;
   }
   .pageNotFound__subtitle {

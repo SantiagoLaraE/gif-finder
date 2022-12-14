@@ -17,11 +17,32 @@ function scrollToTop() {
   window.scroll(0, 0);
 }
 function hash() {
+  scrollToTop();
   LoadingComponent({ show: true });
   if (location.hash.startsWith("#search=")) {
     searchGIFs(location.hash);
   } else {
     getTrendingGIFs({ cleanSection: true });
+  }
+}
+
+async function getTrendingGIFs({ cleanSection }) {
+  infiniteScrollData = {
+    offset: 0,
+    request: "",
+  };
+  GIFsSectionTitle.innerHTML = "Trending";
+  const request = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}`;
+  const response = await fetch(request);
+
+  if (response.ok) {
+    const data = await response.json();
+    infiniteScrollData.request = request;
+    createGIFs(data.data, cleanSection);
+    infiniteScrollData.offset = data.pagination.count;
+    infiniteScrollData.total_count = data.pagination.total_count;
+  } else {
+    errorResponse();
   }
 }
 
@@ -35,12 +56,19 @@ async function searchGIFs(hash) {
   document.getElementById("query").value = query.replaceAll("+", " ");
   const request = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${query}`;
   const response = await fetch(request);
-  const data = await response.json();
-  infiniteScrollData.request = request;
-  createGIFs(data.data, true);
-  infiniteScrollData.offset = data.pagination.count;
-  infiniteScrollData.total_count = data.pagination.total_count;
-  scrollToTop();
+  if (response.ok) {
+    const data = await response.json();
+    if (data.data.length) {
+      infiniteScrollData.request = request;
+      createGIFs(data.data, true);
+      infiniteScrollData.offset = data.pagination.count;
+      infiniteScrollData.total_count = data.pagination.total_count;
+    }else{
+      noResults();
+    }
+  } else {
+    errorResponse();
+  }
 }
 
 function handleQuerySubmit(e) {
@@ -61,27 +89,6 @@ function handleQuerySubmit(e) {
 
 formQuery, addEventListener("submit", handleQuerySubmit);
 
-async function getTrendingGIFs({ cleanSection }) {
-  infiniteScrollData = {
-    offset: 0,
-    request: "",
-  };
-  GIFsSectionTitle.innerHTML = "Trending";
-  const request = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}`;
-  const response = await fetch(request);
-
-  if (response.ok) {
-    const data = await response.json();
-    infiniteScrollData.request = request;
-    createGIFs(data.data, cleanSection);
-    infiniteScrollData.offset = data.pagination.count;
-    infiniteScrollData.total_count = data.pagination.total_count;
-    scrollToTop();
-  } else {
-    errorResponse();
-  }
-}
-
 function errorResponse() {
   GIFsSectionTitle.innerHTML = "Not Found";
 
@@ -93,8 +100,23 @@ function errorResponse() {
 </div>`;
 
   wrapper.innerHTML = pageNotFound;
-  LoadingComponent({show:false})
+  LoadingComponent({ show: false });
 }
+
+function noResults() {
+  GIFsSectionTitle.innerHTML = "No result";
+
+  const pageNotFound = `        <div class="noResultsPage container">
+  <h3 class="noResultsPage__title">No results</h3>
+  <p class="noResultsPage__description">No hay resultados para el término que buscaste.</p>
+  <p class="noResultsPage__description">Busca algo diferente o ve a nuestra página principal para encontrar GIFs en tendencia</p>
+  <a class="noResultsPage__link" href="/">Ir a página principal</a>
+</div>`;
+
+  wrapper.innerHTML = pageNotFound;
+  LoadingComponent({ show: false });
+}
+
 function createGIFs(GIFs, cleanSection) {
   const fragment = new DocumentFragment();
   const GIFWidth = getGIFWidth(wrapperWidth);
