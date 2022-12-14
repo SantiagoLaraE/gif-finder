@@ -6,10 +6,13 @@ import {
 } from "./GIFsGrid.js";
 
 const wrapper = document.querySelector(".gifs__wrapper");
+const GIFsSectionTitle = document.querySelector(".gifs__title");
 let wrapperWidth = wrapper.clientWidth;
 const API_KEY = "2STJgtp7HDg3PAulHpsetnjTzGxkVzUk";
-let getOffset = 0;
-let savedRequest = "";
+let infiniteScrollData = {
+  offset: 0,
+  request: "",
+};
 
 function hash() {
   if (location.hash.startsWith("#search=")) {
@@ -20,13 +23,20 @@ function hash() {
 }
 
 async function searchGIFs(hash) {
+  infiniteScrollData = {
+    offset: 0,
+    request: "",
+  };
   const query = hash.substring(8);
-  const request = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&offset=${getOffset}&q=${query}`;
+  GIFsSectionTitle.innerHTML = query;
+  document.getElementById("query").value = query;
+  const request = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${query}`;
   const response = await fetch(request);
   const data = await response.json();
-  savedRequest = request;
+  infiniteScrollData.request = request;
   createGIFs(data.data, true);
-  getOffset = data.pagination.count;
+  infiniteScrollData.offset = data.pagination.count;
+  infiniteScrollData.total_count = data.pagination.total_count;
 }
 
 function handleQuerySubmit(e) {
@@ -48,12 +58,18 @@ function handleQuerySubmit(e) {
 formQuery, addEventListener("submit", handleQuerySubmit);
 
 async function getTrendingGIFs({ cleanSection }) {
-  const request = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&offset=${getOffset}`;
+  infiniteScrollData = {
+    offset: 0,
+    request: "",
+  };
+  GIFsSectionTitle.innerHTML = "Trending";
+  const request = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}`;
   const response = await fetch(request);
   const data = await response.json();
-  savedRequest = request;
+  infiniteScrollData.request = request;
   createGIFs(data.data, cleanSection);
-  getOffset = data.pagination.count;
+  infiniteScrollData.offset = data.pagination.count;
+  infiniteScrollData.total_count = data.pagination.total_count;
 }
 
 function createGIFs(GIFs, cleanSection) {
@@ -108,12 +124,27 @@ window.addEventListener("resize", () => {
   wrapperWidth = wrapper.clientWidth;
   setGrid();
 });
-window.addEventListener("scroll", scrollState);
+window.addEventListener("scroll", infiniteScroll);
 
-function scrollState() {
+async function infiniteScroll() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-  if (scrollHeight - clientHeight - 20 < scrollTop) {
-    getTrendingGIFs({ cleanSection: false });
+  const scrollIsBottom = scrollTop + clientHeight >= scrollHeight - 15;
+  const maxCount = infiniteScrollData.offset < infiniteScrollData.total_count;
+  
+  if (scrollIsBottom && infiniteScrollData.request && maxCount) {
+    console.log(maxCount);
+    const request = infiniteScrollData.request;
+    infiniteScrollData.request = "";
+
+    const response = await fetch(
+      `${request}&offset=${infiniteScrollData.offset}`
+    );
+    const data = await response.json();
+    infiniteScrollData.offset += data.pagination.count;
+    createGIFs(data.data, false);
+
+    infiniteScrollData.request = request;
+    console.log(infiniteScrollData);
   }
 }
