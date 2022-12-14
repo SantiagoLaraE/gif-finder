@@ -69,14 +69,32 @@ async function getTrendingGIFs({ cleanSection }) {
   GIFsSectionTitle.innerHTML = "Trending";
   const request = `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}`;
   const response = await fetch(request);
-  const data = await response.json();
-  infiniteScrollData.request = request;
-  createGIFs(data.data, cleanSection);
-  infiniteScrollData.offset = data.pagination.count;
-  infiniteScrollData.total_count = data.pagination.total_count;
-  scrollToTop();
+
+  if (response.ok) {
+    const data = await response.json();
+    infiniteScrollData.request = request;
+    createGIFs(data.data, cleanSection);
+    infiniteScrollData.offset = data.pagination.count;
+    infiniteScrollData.total_count = data.pagination.total_count;
+    scrollToTop();
+  } else {
+    errorResponse();
+  }
 }
 
+function errorResponse() {
+  GIFsSectionTitle.innerHTML = "Not Found";
+
+  const pageNotFound = `        <div class="pageNotFound container">
+  <h3 class="pageNotFound__title">404</h3>
+  <h4 class="pageNotFound__subtitle">Page not found</h4>
+  <p class="pageNotFound__description">No encontramos lo que buscabas, pero puede ir a nuestra página principal</p>
+  <a class="pageNotFound__link" href="/">Ir a página principal</a>
+</div>`;
+
+  wrapper.innerHTML = pageNotFound;
+  LoadingComponent({show:false})
+}
 function createGIFs(GIFs, cleanSection) {
   const fragment = new DocumentFragment();
   const GIFWidth = getGIFWidth(wrapperWidth);
@@ -118,6 +136,7 @@ function createGIFs(GIFs, cleanSection) {
   setWrapperHeight(wrapper);
 
   wrapper.appendChild(fragment);
+  LoadingComponent({ show: false });
 }
 
 function setGrid() {
@@ -144,9 +163,9 @@ async function infiniteScroll() {
   const scrollIsBottom = scrollTop + clientHeight >= scrollHeight - 15;
   const maxCount = infiniteScrollData.offset < infiniteScrollData.total_count;
 
-  if (!maxCount) {
-    LoadingComponent({ show: false });
-  }
+  !maxCount
+    ? LoadingComponent({ show: false })
+    : LoadingComponent({ show: true });
 
   if (scrollIsBottom && infiniteScrollData.request && maxCount) {
     const request = infiniteScrollData.request;

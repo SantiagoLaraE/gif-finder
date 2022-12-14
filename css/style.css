@@ -237,7 +237,7 @@ h6 {
   transform: none;
 }
 
-/* ------ Btn ScrollToTop ------ */
+/* ------ Loading ------ */
 
 #loading {
   display: none;
@@ -285,5 +285,47 @@ h6 {
   }
   100% {
     transform: translateY(50%);
+  }
+}
+
+/* ------ 404 Page Not Found ------ */
+
+.pageNotFound {
+  text-align: center;
+  padding: 4.8rem 1.2rem;
+  font-size: 1.6rem;
+}
+
+.pageNotFound__title {
+  font-size: 7.2rem;
+}
+.pageNotFound__subtitle {
+  font-size: 3.2rem;
+}
+
+.pageNotFound__link {
+  display: inline-block;
+  margin-top: 1.6rem;
+  border-radius: 0.8rem;
+  color: var(--textColor);
+  padding: 1.6rem;
+  font-weight: bold;
+  text-decoration: none;
+  background: linear-gradient(45deg, var(--blue), var(--purple), var(--red));
+}
+
+@media screen and (min-width: 768px) {
+  .pageNotFound {
+    padding: 7.2rem 0;
+    font-size: 1.8rem;
+  }
+  .pageNotFound__title {
+    font-size: 10rem;
+  }
+  .pageNotFound__subtitle {
+    font-size: 3.2rem;
+  }
+  .pageNotFound__link {
+    font-size: 1.6rem;
   }
 }
