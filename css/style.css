@@ -15,6 +15,7 @@ html {
   font-size: 62.5%;
   font-family: "Inter", sans-serif;
   scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 h1,
 h2,
@@ -25,7 +26,7 @@ h6 {
   margin: 0;
 }
 .container {
-  max-width: 1200px;
+  max-width: 120rem;
   margin: 0 auto;
   padding: 0 1.2rem;
 }
@@ -42,9 +43,9 @@ h6 {
   z-index: 10;
   background-color: var(--backgroundColor);
 }
-.header--scrolling::after{
+.header--scrolling::after {
   --height: 3.2rem;
-  content: '';
+  content: "";
   width: 100%;
   height: var(--height);
   position: absolute;
@@ -175,7 +176,6 @@ h6 {
 }
 .gifs__wrapper {
   position: relative;
-  min-height: 100vh;
 }
 .gif {
   position: absolute;
@@ -219,8 +219,8 @@ h6 {
 
 /* ------ Btn ScrollToTop ------ */
 
-#scrollToTopBtn{
-  transform: translateY(200px);
+#scrollToTopBtn {
+  transform: translateY(20rem);
   position: fixed;
   z-index: 20;
   bottom: 2.4rem;
@@ -228,12 +228,62 @@ h6 {
   background: linear-gradient(45deg, var(--blue), var(--purple), var(--red));
   border: none;
   padding: 1.6rem;
-  border-radius: 50px;
-  box-shadow: 0 0 24px 8px var(--backgroundColor);
+  border-radius: 5rem;
+  box-shadow: 0 0 2.4rem 0.8rem var(--backgroundColor);
   cursor: pointer;
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
-#scrollToTopBtn.active{
+#scrollToTopBtn.active {
   transform: none;
+}
 
+/* ------ Btn ScrollToTop ------ */
+
+#loading {
+  display: none;
+  justify-content: center;
+  gap: 1.6rem;
+  padding: 3.2rem;
+}
+#loading.active {
+  display: flex;
+}
+.loading__square {
+  width: 3.2rem;
+  height: 3.2rem;
+  background-color: red;
+  animation: loading 1s ease-in-out infinite backwards;
+  border-radius: 0.2rem;
+}
+
+.loading__square--yellow {
+  background-color: var(--yellow);
+}
+.loading__square--red {
+  background-color: var(--red);
+  animation-delay: 0.1s;
+}
+.loading__square--purple {
+  background-color: var(--purple);
+  animation-delay: 0.2s;
+}
+.loading__square--blue {
+  background-color: var(--blue);
+  animation-delay: 0.3s;
+}
+.loading__square--green {
+  background-color: var(--green);
+  animation-delay: 0.4s;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateY(50%);
+  }
+  50% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(50%);
+  }
 }

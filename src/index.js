@@ -17,6 +17,7 @@ function scrollToTop() {
   window.scroll(0, 0);
 }
 function hash() {
+  LoadingComponent({ show: true });
   if (location.hash.startsWith("#search=")) {
     searchGIFs(location.hash);
   } else {
@@ -100,8 +101,8 @@ function createGIFs(GIFs, cleanSection) {
     article.style.width = `${GIFWidth}px`;
     article.style.height = `${GIFHeight}px`;
     article.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
-    article.dataset.imgWidth= imgWidth;
-    article.dataset.imgHeight= imgHeight;
+    article.dataset.imgWidth = imgWidth;
+    article.dataset.imgHeight = imgHeight;
 
     const picture = document.createElement("picture");
 
@@ -129,7 +130,7 @@ function setGrid() {
     const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
 
     GIF.style.width = `${GIFWidth}px`;
-    const GIFImg =  GIF.querySelector('.gif-img');
+    const GIFImg = GIF.querySelector(".gif-img");
     GIF.style.height = `${GIFImg.height}px`;
     GIF.style.transform = getGIFTranslate(GIFWidth, GIFHeight);
   });
@@ -143,8 +144,11 @@ async function infiniteScroll() {
   const scrollIsBottom = scrollTop + clientHeight >= scrollHeight - 15;
   const maxCount = infiniteScrollData.offset < infiniteScrollData.total_count;
 
+  if (!maxCount) {
+    LoadingComponent({ show: false });
+  }
+
   if (scrollIsBottom && infiniteScrollData.request && maxCount) {
-    console.log(maxCount);
     const request = infiniteScrollData.request;
     infiniteScrollData.request = "";
 
@@ -156,7 +160,6 @@ async function infiniteScroll() {
     createGIFs(data.data, false);
 
     infiniteScrollData.request = request;
-    console.log(infiniteScrollData);
   }
 }
 
@@ -172,15 +175,14 @@ function lazyLoadGIFs(item) {
       if (entry.isIntersecting) {
         const article = entry.target;
         const [, gifLoading] = article.classList.values();
-        
 
         const img = article.querySelector(".gif-img");
         img.src = img.dataset.src;
 
-        img.addEventListener('load', () => {
+        img.addEventListener("load", () => {
           article.classList.remove(gifLoading);
           img.classList.add("gif-img--loaded");
-        })
+        });
 
         observer.unobserve(article);
       }
@@ -190,19 +192,27 @@ function lazyLoadGIFs(item) {
   observer.observe(item);
 }
 
-function headerChange() {
-  const header = document.querySelector('.header');
-  const headerHeight = header.clientHeight;
-  const {scrollTop} = document.documentElement;
-  if(scrollTop > (headerHeight / 2)){
-    header.classList.add('header--scrolling');
-    scrollToTopBtn.classList.add('active');
-  }else{
-    header.classList.remove('header--scrolling');
-    scrollToTopBtn.classList.remove('active');
+function LoadingComponent({ show }) {
+  if (show) {
+    loading.classList.add("active");
+  } else {
+    loading.classList.remove("active");
   }
 }
-scrollToTopBtn.addEventListener('click', scrollToTop);
+
+function headerChange() {
+  const header = document.querySelector(".header");
+  const headerHeight = header.clientHeight;
+  const { scrollTop } = document.documentElement;
+  if (scrollTop > headerHeight / 2) {
+    header.classList.add("header--scrolling");
+    scrollToTopBtn.classList.add("active");
+  } else {
+    header.classList.remove("header--scrolling");
+    scrollToTopBtn.classList.remove("active");
+  }
+}
+scrollToTopBtn.addEventListener("click", scrollToTop);
 window.addEventListener("DOMContentLoaded", hash);
 window.addEventListener("hashchange", hash);
 window.addEventListener("resize", () => {
