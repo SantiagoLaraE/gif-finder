@@ -128,7 +128,6 @@ function createGIFs(GIFs, cleanSection) {
   }
 
   GIFs.map((GIF) => {
-    console.log(GIF)
     const imgWidth = GIF.images.fixed_width.width;
     const imgHeight = GIF.images.fixed_width.height;
     const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
