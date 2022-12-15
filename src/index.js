@@ -150,7 +150,7 @@ function createGIFs(GIFs, cleanSection) {
 
     const img = document.createElement("img");
     img.classList.add("gif-img");
-    img.dataset.src = GIF.images.fixed_width.url;
+    img.dataset.src = GIF.images.preview_webp.url;
     img.alt = GIF.title;
     img.width = GIFWidth;
     img.height = GIFHeight;
@@ -260,6 +260,7 @@ function headerChange() {
     scrollToTopBtn.classList.remove("active");
   }
 }
+
 scrollToTopBtn.addEventListener("click", scrollToTop);
 window.addEventListener("DOMContentLoaded", hash);
 window.addEventListener("hashchange", hash);
