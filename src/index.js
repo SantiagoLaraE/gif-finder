@@ -21,8 +21,10 @@ function hash() {
   LoadingComponent({ show: true });
   if (location.hash.startsWith("#search=")) {
     searchGIFs(location.hash);
-  } else {
+  } else if (location.hash === '') {
     getTrendingGIFs({ cleanSection: true });
+  } else {
+    errorResponse();
   }
 }
 
@@ -63,7 +65,7 @@ async function searchGIFs(hash) {
       createGIFs(data.data, true);
       infiniteScrollData.offset = data.pagination.count;
       infiniteScrollData.total_count = data.pagination.total_count;
-    }else{
+    } else {
       noResults();
     }
   } else {
@@ -96,7 +98,7 @@ function errorResponse() {
   <h3 class="pageNotFound__title">404</h3>
   <h4 class="pageNotFound__subtitle">Page not found</h4>
   <p class="pageNotFound__description">No encontramos lo que buscabas, pero puede ir a nuestra página principal</p>
-  <a class="pageNotFound__link" href="/">Ir a página principal</a>
+  <a class="pageNotFound__link" href="#">Ir a página principal</a>
 </div>`;
 
   wrapper.innerHTML = pageNotFound;
@@ -110,7 +112,7 @@ function noResults() {
   <h3 class="noResultsPage__title">No results</h3>
   <p class="noResultsPage__description">No hay resultados para el término que buscaste.</p>
   <p class="noResultsPage__description">Busca algo diferente o ve a nuestra página principal para encontrar GIFs en tendencia</p>
-  <a class="noResultsPage__link" href="/">Ir a página principal</a>
+  <a class="noResultsPage__link" href="#">Ir a página principal</a>
 </div>`;
 
   wrapper.innerHTML = pageNotFound;
@@ -172,7 +174,6 @@ function setGrid() {
     const imgWidth = GIF.dataset.imgWidth;
     const imgHeight = GIF.dataset.imgHeight;
     const GIFHeight = (GIFWidth * imgHeight) / imgWidth;
-
 
     const GIFImg = GIF.querySelector(".gif-img");
     GIFImg.width = GIFWidth;
