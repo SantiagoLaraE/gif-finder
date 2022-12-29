@@ -21,7 +21,7 @@ function hash() {
   LoadingComponent({ show: true });
   if (location.hash.startsWith("#search=")) {
     searchGIFs(location.hash);
-  } else if (location.hash === '') {
+  } else if (location.hash === "") {
     getTrendingGIFs({ cleanSection: true });
   } else {
     errorResponse();
@@ -205,6 +205,7 @@ async function infiniteScroll() {
     );
     const data = await response.json();
     infiniteScrollData.offset += data.pagination.count;
+    infiniteScrollData.total_count = data.pagination.total_count;
     createGIFs(data.data, false);
 
     infiniteScrollData.request = request;
